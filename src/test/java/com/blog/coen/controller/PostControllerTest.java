@@ -25,9 +25,12 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@AutoConfigureMockMvc
 @SpringBootTest
+@AutoConfigureMockMvc
 class PostControllerTest {
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @Autowired
     private MockMvc mockMvc;
@@ -49,8 +52,7 @@ class PostControllerTest {
                 .content("내용입니다.")
                 .build();
 
-        ObjectMapper objectMapper = new ObjectMapper();
-        String json = objectMapper.writeValueAsString(request);// PostCreate의 Getter를 사용하여 해당 argument 들을 json 형태로 불러온다.
+        String json = objectMapper.writeValueAsString(request); // PostCreate의 Getter를 사용하여 해당 argument 들을 json 형태로 불러온다.
 
         // expected
         mockMvc.perform(post("/posts")
@@ -58,7 +60,7 @@ class PostControllerTest {
                         .content(json)
                 ) // application/json
                 .andExpect(status().isOk())
-                .andExpect(content().string("{}"))
+                .andExpect(content().string(""))
                 .andDo(print()); // 실패시에 나오는 것처럼 성공해도 프린트함
     }
 
@@ -66,15 +68,18 @@ class PostControllerTest {
     @Test
     @DisplayName("/posts 요청시 title 값은 필수다.")
     void test2() throws Exception {
-        // 글 제목
-        // 글 내용
+        // given
+        PostCreate request = PostCreate.builder()
+                .content("내용입니다.")
+                .build();
 
+        String json = objectMapper.writeValueAsString(request);
 
         // expected
         mockMvc.perform(post("/posts")
                         .contentType(APPLICATION_JSON)
                 // "", null 체크해줌(@NotBlank)
-                        .content("{\"title\": \"\", \"content\":\"내용입니다.\"}")
+                        .content(json)
                 )
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.code").value("400")) // junit5 jsonPath
@@ -85,12 +90,20 @@ class PostControllerTest {
 
     @Test
     @DisplayName("/posts 요청시 DB에 값이 저장된다.")
-    void test3() throws Exception {
+    void test03() throws Exception {
+        // given
+        PostCreate request = PostCreate.builder()
+                .title("제목입니다.")
+                .content("내용입니다.")
+                .build();
+
+        String json = objectMapper.writeValueAsString(request);
+
         // when
         mockMvc.perform(post("/posts")
                         .contentType(APPLICATION_JSON)
                 // "", null 체크해줌(@NotBlank)
-                        .content("{\"title\": \"제목입니다.\", \"content\":\"내용입니다.\"}")
+                        .content(json)
                 )
                 .andExpect(status().isOk())
                 .andDo(print()); // 실패시에 나오는 것처럼 성공해도 프린트함
