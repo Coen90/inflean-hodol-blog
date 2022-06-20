@@ -2,6 +2,8 @@ package com.blog.coen.controller;
 
 import com.blog.coen.domain.Post;
 import com.blog.coen.repository.PostRepository;
+import com.blog.coen.request.PostCreate;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -18,6 +20,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -40,14 +43,19 @@ class PostControllerTest {
     @Test
     @DisplayName("/posts 요청시 Hello World를 출력한다.")
     void test() throws Exception {
-        // 글 제목
-        // 글 내용
+        // given
+        PostCreate request = PostCreate.builder()
+                .title("제목입니다.")
+                .content("내용입니다.")
+                .build();
 
+        ObjectMapper objectMapper = new ObjectMapper();
+        String json = objectMapper.writeValueAsString(request);// PostCreate의 Getter를 사용하여 해당 argument 들을 json 형태로 불러온다.
 
         // expected
         mockMvc.perform(post("/posts")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"title\": \"제목입니다\", \"content\":\"내용입니다.\"}")
+                        .contentType(APPLICATION_JSON)
+                        .content(json)
                 ) // application/json
                 .andExpect(status().isOk())
                 .andExpect(content().string("{}"))
@@ -64,7 +72,7 @@ class PostControllerTest {
 
         // expected
         mockMvc.perform(post("/posts")
-                        .contentType(MediaType.APPLICATION_JSON)
+                        .contentType(APPLICATION_JSON)
                 // "", null 체크해줌(@NotBlank)
                         .content("{\"title\": \"\", \"content\":\"내용입니다.\"}")
                 )
@@ -80,7 +88,7 @@ class PostControllerTest {
     void test3() throws Exception {
         // when
         mockMvc.perform(post("/posts")
-                        .contentType(MediaType.APPLICATION_JSON)
+                        .contentType(APPLICATION_JSON)
                 // "", null 체크해줌(@NotBlank)
                         .content("{\"title\": \"제목입니다.\", \"content\":\"내용입니다.\"}")
                 )
