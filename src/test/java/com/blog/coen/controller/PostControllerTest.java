@@ -115,4 +115,30 @@ class PostControllerTest {
         assertEquals("제목입니다.", post.getTitle());
         assertEquals("내용입니다.", post.getContent());
     }
+
+
+    @Test
+    @DisplayName("글 한개 조회")
+    void test4() throws Exception {
+        // given
+        Post post = Post.builder()
+                .title("123456789012345")
+                .content("bar")
+                .build();
+        postRepository.save(post);
+
+        // 클라이언트 요구사항
+            // json 응답에서 title값 길이를 최대 10글자로 해주세요.
+
+
+        // expected(when + then)
+        mockMvc.perform(get("/posts/{postId}", post.getId())
+                .contentType(APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(post.getId()))
+                .andExpect(jsonPath("$.title").value("1234567890"))
+                .andExpect(jsonPath("$.content").value("bar"))
+                .andDo(print());
+
+    }
 }

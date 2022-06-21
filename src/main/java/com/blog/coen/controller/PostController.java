@@ -2,6 +2,7 @@ package com.blog.coen.controller;
 
 import com.blog.coen.domain.Post;
 import com.blog.coen.request.PostCreate;
+import com.blog.coen.response.PostResponse;
 import com.blog.coen.service.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,4 +39,19 @@ public class PostController {
 //        return Map.of("postId", postId);
         postService.write(request);
     }
+
+    /**
+     * /posts -> 글 전체 조회(검색 + 페이징)
+     * /posts/{postId}
+     */
+    @GetMapping("/posts/{postId}")
+    public PostResponse get(@PathVariable(name="postId") Long id) {
+        // Request 클래스 -> PostCreate.java
+        // Response 클래스 -> PostResponse.java -> 서비스 정책에 따른 response class
+
+        PostResponse response = postService.get(id);
+        // 응답클래스 분리(서비스 정책에 맞는)
+        return response;
+    }
+
 }
