@@ -54,4 +54,14 @@ public class PostController {
         return response;
     }
 
+    /**
+     * 조회 API
+     * @GetMapping("/posts/{postId}") -> 단건조회
+     * @GetMapping("/posts") -> 여러개의 글을 조회하는 API
+     */
+    @GetMapping("/posts")
+    public List<PostResponse> getList() {
+        return postService.getList();
+    }
+
 }

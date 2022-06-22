@@ -8,7 +8,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -32,13 +33,24 @@ public class PostService {
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 글입니다."));
 
-        PostResponse response = PostResponse.builder()
+        return PostResponse.builder()
                 .id(post.getId())
                 .title(post.getTitle())
                 .content(post.getContent())
                 .build();
-
-        return response;
     }
 
+    public List<PostResponse> getList() {
+//        return postRepository.findAll().stream()
+//                .map(post -> PostResponse.builder()
+//                            .id(post.getId())
+//                            .title(post.getTitle())
+//                            .content(post.getContent())
+//                            .build())
+//                .collect(Collectors.toList());
+        return postRepository.findAll().stream() // PostResponse에 생성자 오버로딩을 만들어 Post 객체를 넘겨주고, PostResponse 클래스에서 만들기
+                // .map(post -> new PostResponse(post))
+                .map(PostResponse::new)
+                .collect(Collectors.toList());
+    }
 }
