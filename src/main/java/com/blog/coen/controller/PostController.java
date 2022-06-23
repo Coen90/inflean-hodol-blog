@@ -6,6 +6,8 @@ import com.blog.coen.response.PostResponse;
 import com.blog.coen.service.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
@@ -58,10 +60,13 @@ public class PostController {
      * 조회 API
      * @GetMapping("/posts/{postId}") -> 단건조회
      * @GetMapping("/posts") -> 여러개의 글을 조회하는 API
+     *   -> 글이 너무 많은 경우 -> 비용이 많이 든다.
+     *   글이 -> 100,000,000 -> DB글 모두 조회하는 경우 -> DB가 뻗을 수 있다.
+     *   DB -> 애플리케이션 서버로 전달하는 시간, 트래픽비용 등이 많이 발생할 수 있다.
      */
     @GetMapping("/posts")
-    public List<PostResponse> getList() {
-        return postService.getList();
+    public List<PostResponse> getList(/* @PageableDefault(size = 5) */ Pageable pageable) {
+        return postService.getList(pageable);
     }
 
 }

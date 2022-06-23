@@ -17,6 +17,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
@@ -180,4 +183,29 @@ class PostControllerTest {
                 .andExpect(jsonPath("$[1].content").value("content_2"))
                 .andDo(print());
     }
+
+    @Test
+    @DisplayName("글 여러개 조회")
+    void test6() throws Exception {
+        // given
+        List<Post> requestPosts = IntStream.range(1, 31) // for(int i = 0; i < 30; i++)과 같음
+                .mapToObj(i -> Post.builder()
+                        .title("호돌맨 제목 " + i)
+                        .content("반포자이 " + i)
+                        .build())
+                .collect(Collectors.toList());
+
+        postRepository.saveAll(requestPosts);
+
+        // expected(when + then)
+        mockMvc.perform(get("/posts?page=1&sort=id,desc")
+                        .contentType(APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()", Matchers.is(5)))
+                .andExpect(jsonPath("$[0].id", Matchers.is(30)))
+                .andExpect(jsonPath("$[0].title", Matchers.is("호돌맨 제목 30")))
+                .andExpect(jsonPath("$[0].content", Matchers.is("반포자이 30")))
+                .andDo(print());
+    }
+
 }

@@ -6,6 +6,9 @@ import com.blog.coen.request.PostCreate;
 import com.blog.coen.response.PostResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -49,6 +52,16 @@ public class PostService {
 //                            .build())
 //                .collect(Collectors.toList());
         return postRepository.findAll().stream() // PostResponse에 생성자 오버로딩을 만들어 Post 객체를 넘겨주고, PostResponse 클래스에서 만들기
+                // .map(post -> new PostResponse(post))
+                .map(PostResponse::new)
+                .collect(Collectors.toList());
+    }
+
+    public List<PostResponse> getList(Pageable pageable) {
+        // web -> page 1 -> 0
+//        Pageable pageable = PageRequest.of(page, 5, Sort.by(Sort.Direction.DESC, "id"));
+
+        return postRepository.findAll(pageable).stream() // PostResponse에 생성자 오버로딩을 만들어 Post 객체를 넘겨주고, PostResponse 클래스에서 만들기
                 // .map(post -> new PostResponse(post))
                 .map(PostResponse::new)
                 .collect(Collectors.toList());
