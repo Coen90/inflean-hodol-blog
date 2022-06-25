@@ -1,16 +1,16 @@
 package com.blog.coen.service;
 
 import com.blog.coen.domain.Post;
+import com.blog.coen.domain.PostEditor;
 import com.blog.coen.repository.PostRepository;
 import com.blog.coen.request.PostCreate;
+import com.blog.coen.request.PostEdit;
 import com.blog.coen.request.PostSearch;
 import com.blog.coen.response.PostResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -79,5 +79,34 @@ public class PostService {
                 .map(PostResponse::new)
                 .collect(Collectors.toList());
     }
+
+    @Transactional
+    public PostResponse edit(Long id, PostEdit postEdit) {
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 글입니다."));
+
+        PostEditor.PostEditorBuilder postEditorBuilder = post.toEditor();
+
+        PostEditor postEditor = postEditorBuilder
+                .title(postEdit.getTitle())
+                .content(postEdit.getContent())
+                .build();
+
+        post.edit(postEditor);
+
+        return new PostResponse(post);
+
+//        이런 방법도 존재함 (타이틀, 콘텐츠 중 하나만 올 경우)
+//        if(postEdit.getTitle() != null) {
+//            postEditorBuilder.title(postEdit.getTitle());
+//        }
+//
+//        if(postEdit.getContent() != null) {
+//            postEditorBuilder.content(postEdit.getContent());
+//        }
+//
+//        post.edit(postEditorBuilder.build());
+    }
+
 
 }

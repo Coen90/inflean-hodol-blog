@@ -2,6 +2,7 @@ package com.blog.coen.controller;
 
 import com.blog.coen.domain.Post;
 import com.blog.coen.request.PostCreate;
+import com.blog.coen.request.PostEdit;
 import com.blog.coen.request.PostSearch;
 import com.blog.coen.response.PostResponse;
 import com.blog.coen.service.PostService;
@@ -73,5 +74,10 @@ public class PostController {
     @GetMapping("/posts")
     public List<PostResponse> getList(@ModelAttribute PostSearch postSearch) {
         return postService.getList(postSearch);
+    }
+
+    @PatchMapping("/posts/{postId}")
+    public PostResponse edit(@PathVariable Long postId, @RequestBody @Valid PostEdit request) {
+        return postService.edit(postId, request);
     }
 }
