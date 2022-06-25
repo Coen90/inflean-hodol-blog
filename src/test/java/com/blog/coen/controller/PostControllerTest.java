@@ -171,7 +171,7 @@ class PostControllerTest {
          * [{id: ..., title: ...}, {id: ..., title: ...}, ...]
          */
         // expected(when + then)
-        mockMvc.perform(get("/posts")
+        mockMvc.perform(get("/posts?page=1&size=10")
                         .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()", Matchers.is(2)))
@@ -198,10 +198,33 @@ class PostControllerTest {
         postRepository.saveAll(requestPosts);
 
         // expected(when + then)
-        mockMvc.perform(get("/posts?page=1&sort=id,desc")
+        mockMvc.perform(get("/posts?page=1&size=10")
                         .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()", Matchers.is(5)))
+                .andExpect(jsonPath("$.length()", Matchers.is(10)))
+                .andExpect(jsonPath("$[0].id", Matchers.is(30)))
+                .andExpect(jsonPath("$[0].title", Matchers.is("호돌맨 제목 30")))
+                .andExpect(jsonPath("$[0].content", Matchers.is("반포자이 30")))
+                .andDo(print());
+    }
+    @Test
+    @DisplayName("페이지를 0으로 요청하면 첫페이지를 가져온다.")
+    void test7() throws Exception {
+        // given
+        List<Post> requestPosts = IntStream.range(1, 31) // for(int i = 0; i < 30; i++)과 같음
+                .mapToObj(i -> Post.builder()
+                        .title("호돌맨 제목 " + i)
+                        .content("반포자이 " + i)
+                        .build())
+                .collect(Collectors.toList());
+
+        postRepository.saveAll(requestPosts);
+
+        // expected(when + then)
+        mockMvc.perform(get("/posts?page=0&size=10")
+                        .contentType(APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()", Matchers.is(10)))
                 .andExpect(jsonPath("$[0].id", Matchers.is(30)))
                 .andExpect(jsonPath("$[0].title", Matchers.is("호돌맨 제목 30")))
                 .andExpect(jsonPath("$[0].content", Matchers.is("반포자이 30")))

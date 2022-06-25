@@ -2,6 +2,7 @@ package com.blog.coen.controller;
 
 import com.blog.coen.domain.Post;
 import com.blog.coen.request.PostCreate;
+import com.blog.coen.request.PostSearch;
 import com.blog.coen.response.PostResponse;
 import com.blog.coen.service.PostService;
 import lombok.RequiredArgsConstructor;
@@ -64,9 +65,13 @@ public class PostController {
      *   글이 -> 100,000,000 -> DB글 모두 조회하는 경우 -> DB가 뻗을 수 있다.
      *   DB -> 애플리케이션 서버로 전달하는 시간, 트래픽비용 등이 많이 발생할 수 있다.
      */
-    @GetMapping("/posts")
-    public List<PostResponse> getList(/* @PageableDefault(size = 5) */ Pageable pageable) {
-        return postService.getList(pageable);
-    }
+//    @GetMapping("/posts")
+//    public List<PostResponse> getList(/* @PageableDefault(size = 5) */ Pageable pageable) {
+//        return postService.getList(pageable);
+//    }
 
+    @GetMapping("/posts")
+    public List<PostResponse> getList(@ModelAttribute PostSearch postSearch) {
+        return postService.getList(postSearch);
+    }
 }

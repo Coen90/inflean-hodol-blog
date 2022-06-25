@@ -1,0 +1,22 @@
+package com.blog.coen.request;
+
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+
+@Setter @Getter
+@Builder
+public class PostSearch {
+
+    private static final int MAX_SIZE = 2000;
+
+    @Builder.Default
+    private Integer page = 1;
+
+    @Builder.Default // class builder에서 사용가능
+    private Integer size = 10;
+
+    public long getOffset() {
+        return (long) (Math.max(1, page) - 1) * Math.min(size, MAX_SIZE);
+    }
+}
