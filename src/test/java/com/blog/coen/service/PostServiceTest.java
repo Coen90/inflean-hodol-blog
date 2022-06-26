@@ -1,6 +1,7 @@
 package com.blog.coen.service;
 
 import com.blog.coen.domain.Post;
+import com.blog.coen.exception.PostNotFound;
 import com.blog.coen.repository.PostRepository;
 import com.blog.coen.request.PostCreate;
 import com.blog.coen.request.PostEdit;
@@ -190,4 +191,87 @@ class PostServiceTest  {
         Assertions.assertEquals("초가집", changedPost.getContent());
     }
 
+    @Test
+    @DisplayName("글 삭제")
+    void test7() {
+        // given
+        Post post = Post.builder()
+                .title("호돌맨")
+                .content("반포자이")
+                .build();
+
+        postRepository.save(post);
+
+        // when
+        postService.delete(post.getId());
+
+        // then
+        Assertions.assertEquals(0, postRepository.count());
+
+
+    }
+
+    @Test
+    @DisplayName("글 한개 조회 - 존재하지 않는 글")
+    void test8() {
+        // given
+        Post post = Post.builder()
+                .title("호돌맨")
+                .content("반포자이")
+                .build();
+        postRepository.save(post);
+
+        // when
+//        PostResponse response = postService.get(post.getId() + 1L);
+
+        // then
+        Assertions.assertThrows(PostNotFound.class, () -> {
+            postService.get(post.getId() + 1L);
+        });
+
+    }
+
+    @Test
+    @DisplayName("글 삭제 - 존재하지 않는 글")
+    void test9() {
+        // given
+        Post post = Post.builder()
+                .title("호돌맨")
+                .content("반포자이")
+                .build();
+
+        postRepository.save(post);
+
+        // when
+
+
+        // then
+        Assertions.assertThrows(PostNotFound.class, () -> {
+            postService.delete(post.getId() + 1L);
+        });
+    }
+
+
+    @Test
+    @DisplayName("글 내용 수정 - 존재하지 않는 글")
+    void test10() throws Exception {
+        // given
+        Post post = Post.builder()
+                .title("호돌맨")
+                .content("반포자이")
+                .build();
+
+        postRepository.save(post);
+
+        PostEdit postEdit = PostEdit.builder()
+                .title("호돌맨")
+                .content("초가집")
+                .build();
+
+        // when
+
+        Assertions.assertThrows(PostNotFound.class, () -> {
+            postService.edit(post.getId() + 1L, postEdit);
+        });
+    }
 }
