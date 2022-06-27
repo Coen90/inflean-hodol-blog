@@ -1,6 +1,7 @@
 package com.blog.coen.controller;
 
 import com.blog.coen.domain.Post;
+import com.blog.coen.exception.InvalidRequest;
 import com.blog.coen.request.PostCreate;
 import com.blog.coen.request.PostEdit;
 import com.blog.coen.request.PostSearch;
@@ -41,6 +42,10 @@ public class PostController {
         //          -> 한번에 일괄적으로 잘 처리되는 케이스가 없다 -> 잘 관리하는 형태가 중요
 //        Long postId = postService.write(request);
 //        return Map.of("postId", postId);
+//        if(request.getTitle().contains("바보")) { //
+//            throw new InvalidRequest();
+//        }
+        request.validate();
         postService.write(request);
     }
 
