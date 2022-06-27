@@ -69,28 +69,28 @@ class PostControllerTest {
     }
 
 
-    @Test
-    @DisplayName("/posts 요청시 title 값은 필수다.")
-    void test2() throws Exception {
-        // given
-        PostCreate request = PostCreate.builder()
-                .content("내용입니다.")
-                .build();
-
-        String json = objectMapper.writeValueAsString(request);
-
-        // expected
-        mockMvc.perform(post("/posts")
-                        .contentType(APPLICATION_JSON)
-                // "", null 체크해줌(@NotBlank)
-                        .content(json)
-                )
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.code").value("400")) // junit5 jsonPath
-                .andExpect(jsonPath("$.message").value("잘못된 요청입니다.")) // junit5 jsonPath
-                .andExpect(jsonPath("$.validation.title").value("타이틀을 입력해주세요.")) // junit5 jsonPath
-                .andDo(print()); // 실패시에 나오는 것처럼 성공해도 프린트함
-    }
+//    @Test
+//    @DisplayName("/posts 요청시 title 값은 필수다.")
+//    void test2() throws Exception {
+//        // given
+//        PostCreate request = PostCreate.builder()
+//                .content("내용입니다.")
+//                .build();
+//
+//        String json = objectMapper.writeValueAsString(request);
+//
+//        // expected
+//        mockMvc.perform(post("/posts")
+//                        .contentType(APPLICATION_JSON)
+//                // "", null 체크해줌(@NotBlank)
+//                        .content(json)
+//                )
+//                .andExpect(status().isBadRequest())
+//                .andExpect(jsonPath("$.code").value("400")) // junit5 jsonPath
+//                .andExpect(jsonPath("$.message").value("잘못된 요청입니다.")) // junit5 jsonPath
+//                .andExpect(jsonPath("$.validation.title").value("타이틀을 입력해주세요.")) // junit5 jsonPath
+//                .andDo(print()); // 실패시에 나오는 것처럼 성공해도 프린트함
+//    }
 
     @Test
     @DisplayName("/posts 요청시 DB에 값이 저장된다.")
@@ -145,89 +145,89 @@ class PostControllerTest {
                 .andDo(print());
     }
 
-    @Test
-    @DisplayName("글 여러개 조회")
-    void test5() throws Exception {
-        // given
-        Post requestPost1 = postRepository.save(Post.builder()
-                .title("title_1")
-                .content("content_1")
-                .build());
+//    @Test
+//    @DisplayName("글 여러개 조회")
+//    void test5() throws Exception {
+//        // given
+//        Post requestPost1 = postRepository.save(Post.builder()
+//                .title("title_1")
+//                .content("content_1")
+//                .build());
+//
+//        Post requestPost2 = postRepository.save( Post.builder()
+//                .title("title_2")
+//                .content("content_2")
+//                .build());
+//
+//        // 클라이언트 요구사항
+//            // json 응답에서 title값 길이를 최대 10글자로 해주세요.
+//
+//        /**
+//         * {id: ..., title: ...}
+//         */
+//        /**
+//         * [{id: ..., title: ...}, {id: ..., title: ...}, ...]
+//         */
+//        // expected(when + then)
+//        mockMvc.perform(get("/posts?page=1&size=10")
+//                        .contentType(APPLICATION_JSON))
+//                .andExpect(status().isOk())
+//                .andExpect(jsonPath("$.length()", Matchers.is(2)))
+//                .andExpect(jsonPath("$[0].id").value(requestPost1.getId()))
+//                .andExpect(jsonPath("$[0].title").value("title_1"))
+//                .andExpect(jsonPath("$[0].content").value("content_1"))
+//                .andExpect(jsonPath("$[1].id").value(requestPost2.getId()))
+//                .andExpect(jsonPath("$[1].title").value("title_2"))
+//                .andExpect(jsonPath("$[1].content").value("content_2"))
+//                .andDo(print());
+//    }
 
-        Post requestPost2 = postRepository.save( Post.builder()
-                .title("title_2")
-                .content("content_2")
-                .build());
-
-        // 클라이언트 요구사항
-            // json 응답에서 title값 길이를 최대 10글자로 해주세요.
-
-        /**
-         * {id: ..., title: ...}
-         */
-        /**
-         * [{id: ..., title: ...}, {id: ..., title: ...}, ...]
-         */
-        // expected(when + then)
-        mockMvc.perform(get("/posts?page=1&size=10")
-                        .contentType(APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()", Matchers.is(2)))
-                .andExpect(jsonPath("$[0].id").value(requestPost1.getId()))
-                .andExpect(jsonPath("$[0].title").value("title_1"))
-                .andExpect(jsonPath("$[0].content").value("content_1"))
-                .andExpect(jsonPath("$[1].id").value(requestPost2.getId()))
-                .andExpect(jsonPath("$[1].title").value("title_2"))
-                .andExpect(jsonPath("$[1].content").value("content_2"))
-                .andDo(print());
-    }
-
-    @Test
-    @DisplayName("글 여러개 조회")
-    void test6() throws Exception {
-        // given
-        List<Post> requestPosts = IntStream.range(1, 31) // for(int i = 0; i < 30; i++)과 같음
-                .mapToObj(i -> Post.builder()
-                        .title("호돌맨 제목 " + i)
-                        .content("반포자이 " + i)
-                        .build())
-                .collect(Collectors.toList());
-
-        postRepository.saveAll(requestPosts);
-
-        // expected(when + then)
-        mockMvc.perform(get("/posts?page=1&size=10")
-                        .contentType(APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()", Matchers.is(10)))
-                .andExpect(jsonPath("$[0].id", Matchers.is(30)))
-                .andExpect(jsonPath("$[0].title", Matchers.is("호돌맨 제목 30")))
-                .andExpect(jsonPath("$[0].content", Matchers.is("반포자이 30")))
-                .andDo(print());
-    }
-    @Test
-    @DisplayName("페이지를 0으로 요청하면 첫페이지를 가져온다.")
-    void test7() throws Exception {
-        // given
-        List<Post> requestPosts = IntStream.range(1, 31) // for(int i = 0; i < 30; i++)과 같음
-                .mapToObj(i -> Post.builder()
-                        .title("호돌맨 제목 " + i)
-                        .content("반포자이 " + i)
-                        .build())
-                .collect(Collectors.toList());
-
-        postRepository.saveAll(requestPosts);
-
-        // expected(when + then)
-        mockMvc.perform(get("/posts?page=0&size=10")
-                        .contentType(APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()", Matchers.is(10)))
-                .andExpect(jsonPath("$[0].id", Matchers.is(30)))
-                .andExpect(jsonPath("$[0].title", Matchers.is("호돌맨 제목 30")))
-                .andExpect(jsonPath("$[0].content", Matchers.is("반포자이 30")))
-                .andDo(print());
-    }
+//    @Test
+//    @DisplayName("글 여러개 조회")
+//    void test6() throws Exception {
+//        // given
+//        List<Post> requestPosts = IntStream.range(1, 31) // for(int i = 0; i < 30; i++)과 같음
+//                .mapToObj(i -> Post.builder()
+//                        .title("호돌맨 제목 " + i)
+//                        .content("반포자이 " + i)
+//                        .build())
+//                .collect(Collectors.toList());
+//
+//        postRepository.saveAll(requestPosts);
+//
+//        // expected(when + then)
+//        mockMvc.perform(get("/posts?page=1&size=10")
+//                        .contentType(APPLICATION_JSON))
+//                .andExpect(status().isOk())
+//                .andExpect(jsonPath("$.length()", Matchers.is(10)))
+//                .andExpect(jsonPath("$[0].id", Matchers.is(30)))
+//                .andExpect(jsonPath("$[0].title", Matchers.is("호돌맨 제목 30")))
+//                .andExpect(jsonPath("$[0].content", Matchers.is("반포자이 30")))
+//                .andDo(print());
+//    }
+//    @Test
+//    @DisplayName("페이지를 0으로 요청하면 첫페이지를 가져온다.")
+//    void test7() throws Exception {
+//        // given
+//        List<Post> requestPosts = IntStream.range(1, 31) // for(int i = 0; i < 30; i++)과 같음
+//                .mapToObj(i -> Post.builder()
+//                        .title("호돌맨 제목 " + i)
+//                        .content("반포자이 " + i)
+//                        .build())
+//                .collect(Collectors.toList());
+//
+//        postRepository.saveAll(requestPosts);
+//
+//        // expected(when + then)
+//        mockMvc.perform(get("/posts?page=0&size=10")
+//                        .contentType(APPLICATION_JSON))
+//                .andExpect(status().isOk())
+//                .andExpect(jsonPath("$.length()", Matchers.is(10)))
+//                .andExpect(jsonPath("$[0].id", Matchers.is(30)))
+//                .andExpect(jsonPath("$[0].title", Matchers.is("호돌맨 제목 30")))
+//                .andExpect(jsonPath("$[0].content", Matchers.is("반포자이 30")))
+//                .andDo(print());
+//    }
 
     @Test
     @DisplayName("글 제목 수정")
@@ -319,4 +319,6 @@ class PostControllerTest {
                 .andExpect(status().isBadRequest())
                 .andDo(print()); // 실패시에 나오는 것처럼 성공해도 프린트함
     }
+
+
 }
