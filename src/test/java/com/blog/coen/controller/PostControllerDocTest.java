@@ -24,7 +24,6 @@ import org.springframework.web.context.WebApplicationContext;
 
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -36,17 +35,15 @@ public class PostControllerDocTest {
     @Autowired
     private PostRepository postRepository;
 
-<<<<<<< HEAD
+    @Autowired
+    private ObjectMapper objectMapper;
+
     @BeforeEach
     public void setUp(WebApplicationContext webApplicationContext, RestDocumentationContextProvider restDocumentation) {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
                 .apply(documentationConfiguration(restDocumentation))
                 .build();
     }
-=======
-    @Autowired
-    private ObjectMapper objectMapper;
->>>>>>> fd31e8c93672994776515c80121d086638fd20e4
 
     @Test
     @DisplayName("글 단건 조회 테스트")
