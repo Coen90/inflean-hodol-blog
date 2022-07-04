@@ -21,23 +21,58 @@ const moveToRead = () => {
 <template>
   <ul>
     <li v-for="post in posts" :key="post.id">
-      <div>
+      <div class="title">
         <router-link :to="{ name: 'read', params: { postId: post.id } }">{{
           post.title
         }}</router-link>
       </div>
 
-      <div>{{ post.content }}</div>
+      <div class="content">{{ post.content }}</div>
+
+      <div class="sub d-flex">
+        <div class="category">개발</div>
+        <div class="regDate">2022.07.04</div>
+      </div>
     </li>
   </ul>
 </template>
 
-<style scoped>
-li {
-  margin-bottom: 1rem;
+<style scoped lang="scss">
+ul {
+  list-style: none;
+  padding: 0;
 }
 
-li:last-child {
-  margin-bottom: 0;
+li {
+  margin-bottom: 2rem;
+
+  .title {
+    a {
+      font-size: 1.1rem;
+      color: #383838;
+      text-decoration: none;
+    }
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+  .content {
+    font-size: 0.85rem;
+    margin-top: 7px;
+    color: #5d5d5d;
+  }
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  .sub {
+    margin-top: 7px;
+    font-size: 0.78rem;
+    margin-top: 5px;
+    .regDate {
+      margin-left: 10px;
+      color: #6b6b6b;
+    }
+  }
 }
 </style>
