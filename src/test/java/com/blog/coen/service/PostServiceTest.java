@@ -49,6 +49,7 @@ class PostServiceTest  {
         // then
         Assertions.assertEquals(1L, postRepository.count());
         Post post = postRepository.findAll().get(0);
+
         assertEquals("제목입니다.", post.getTitle());
         assertEquals("내용입니다.", post.getContent());
     }

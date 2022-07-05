@@ -35,6 +35,8 @@ const edit = () => {
       type="text"
       v-model="post.title"
       placeholder="제목을 입력해주세요."
+      maxlength="100"
+      show-word-limit
     />
   </div>
 

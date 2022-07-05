@@ -19,10 +19,20 @@ const write = function () {
       router.replace({ name: "home" }); // index.ts -> routes -> name
     });
 };
+
+const home = () => {
+  router.replace({ name: "home" });
+};
 </script>
 <template>
   <div>
-    <el-input type="text" v-model="title" placeholder="제목을 입력해주세요." />
+    <el-input
+      type="text"
+      v-model="title"
+      placeholder="제목을 입력해주세요."
+      maxlength="100"
+      show-word-limit
+    />
   </div>
 
   <div class="mt-2">
@@ -32,6 +42,7 @@ const write = function () {
   <div class="mt-2">
     <div class="d-flex justify-content-end">
       <el-button type="primary" @click="write()">글 작성 완료</el-button>
+      <el-button type="info" @click="home()">Home</el-button>
     </div>
   </div>
 </template>
