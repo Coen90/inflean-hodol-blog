@@ -10,6 +10,7 @@ const posts = ref([
     id: 0,
     title: "",
     content: "",
+    createdTime: "",
   },
 ]);
 axios.get("/api/posts?page=1&size=5").then((response) => {
@@ -37,7 +38,7 @@ const moveToRead = () => {
 
       <div class="sub d-flex">
         <div class="category">개발</div>
-        <div class="regDate">2022.07.04</div>
+        <div class="regDate">{{ post.createdTime }}</div>
       </div>
     </li>
   </ul>
