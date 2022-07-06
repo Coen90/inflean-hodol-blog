@@ -15,8 +15,8 @@ const home = () => {
 const login = () => {
   axios
     .post("/api/login", {
-      id: username.value,
-      pwd: password.value,
+      username: username.value,
+      password: password.value,
     })
     .then(() => {
       router.replace({ name: "home" });
