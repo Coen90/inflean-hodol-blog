@@ -8,8 +8,6 @@
   </el-main>
 </template>
 
-<script lang="ts"></script>
-
 <style scoped>
 .content {
   height: calc(100vh - 60px);

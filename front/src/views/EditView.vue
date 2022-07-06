@@ -28,6 +28,10 @@ const edit = () => {
     router.replace({ name: "home" });
   });
 };
+
+const cancel = () => {
+  router.push({ name: "read", params: { postId: props.postId } });
+};
 </script>
 <template>
   <div>
@@ -45,7 +49,10 @@ const edit = () => {
   </div>
 
   <div class="mt-2">
-    <el-button type="warning" @click="edit()">수정 완료</el-button>
+    <div class="d-flex justify-content-end">
+      <el-button type="warning" @click="edit()">수정 완료</el-button>
+      <el-button type="info" @click="cancel()">취소</el-button>
+    </div>
   </div>
 </template>
 

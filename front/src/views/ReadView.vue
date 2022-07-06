@@ -14,6 +14,8 @@ const post = ref({
   id: 0,
   title: "",
   content: "",
+  createdTime: "",
+  updateTime: "",
 });
 
 const router = useRouter();
@@ -40,7 +42,10 @@ onMounted(() => {
       <h2 class="title">{{ post.title }}</h2>
       <div class="sub d-flex">
         <div class="category">개발</div>
-        <div class="regDate">2022.07.04 01:22:30</div>
+        <div class="regDate">{{ post.createdTime }}</div>
+        <div class="modDate" v-if="post.updateTime !== post.createdTime">
+          {{ post.updateTime }}
+        </div>
       </div>
     </el-col>
   </el-row>
@@ -79,6 +84,10 @@ onMounted(() => {
   font-size: 0.78rem;
   margin-top: 10px;
   .regDate {
+    margin-left: 10px;
+    color: #6b6b6b;
+  }
+  .modDate {
     margin-left: 10px;
     color: #6b6b6b;
   }
