@@ -28,7 +28,7 @@ const login = () => {
   <el-card class="box-card">
     <template #header>
       <div class="card-header">
-        <span>Log-in</span>
+        <span>Log-in </span>
       </div>
     </template>
     <el-input

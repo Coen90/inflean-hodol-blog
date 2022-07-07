@@ -31,7 +31,7 @@ const moveToRead = () => {
       <div class="title">
         <router-link :to="{ name: 'read', params: { postId: post.id } }">{{
           post.title
-        }}</router-link>
+        }}</router-link> 
       </div>
 
       <div class="content">{{ post.content }}</div>

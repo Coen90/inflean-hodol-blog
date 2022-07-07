@@ -18,7 +18,7 @@ const post = ref({
   updateTime: "",
 });
 
-const router = useRouter();
+const router = useRouter(); 
 
 const moveToEdit = () => {
   router.push({ name: "edit", params: { postId: props.postId } });

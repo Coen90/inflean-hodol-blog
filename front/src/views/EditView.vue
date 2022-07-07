@@ -50,7 +50,7 @@ const cancel = () => {
 
   <div class="mt-2">
     <div class="d-flex justify-content-end">
-      <el-button type="warning" @click="edit()">수정 완료</el-button>
+      <el-button type="warning" @click="edit()">수정 완료</el-button> 
       <el-button type="info" @click="cancel()">취소</el-button>
     </div>
   </div>
