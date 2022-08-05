@@ -48,9 +48,7 @@ public class ExceptionController {
                 .message(e.getMessage())
                 .validation(e.getValidation())
                 .build();
-
         // 응답 json validation -> title: 제목에 바보를 포함할 수 없습니다.
-
 //        if(e instanceof InvalidRequest) {
 //            InvalidRequest invalidRequest = (InvalidRequest) e;
 //            String fieldName = invalidRequest.getFieldName();
