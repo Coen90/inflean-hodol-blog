@@ -42,8 +42,6 @@ public class PostService {
                 .id(post.getId())
                 .title(post.getTitle())
                 .content(post.getContent())
-                .createdTime(post.getCreatedTime())
-                .updateTime(post.getUpdateTime())
                 .build();
     }
 

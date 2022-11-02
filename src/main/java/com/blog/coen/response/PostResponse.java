@@ -15,16 +15,12 @@ public class PostResponse {
     private final Long id;
     private final String title;
     private final String content;
-    private final LocalDateTime createdTime;
-    private final LocalDateTime updateTime;
 
     // 생성자 오버로딩
     public PostResponse(Post post) {
         this.id = post.getId();
         this.title = post.getTitle();
         this.content = post.getContent();
-        this.createdTime = post.getCreatedTime();
-        this.updateTime = post.getUpdateTime();
     }
 
 //    public String getTitle() {
@@ -33,12 +29,10 @@ public class PostResponse {
 
 //    방법 2
     @Builder
-    public PostResponse(Long id, String title, String content, LocalDateTime createdTime, LocalDateTime updateTime) {
+    public PostResponse(Long id, String title, String content) {
         this.id = id;
 //        this.title = title.substring(0, Math.min(title.length(), 10));
         this.title = title;
         this.content = content;
-        this.createdTime = createdTime;
-        this.updateTime = updateTime;
     }
 }

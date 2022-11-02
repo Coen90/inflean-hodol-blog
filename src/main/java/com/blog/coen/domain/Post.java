@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
-public class Post extends BaseEntity {
+public class Post {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

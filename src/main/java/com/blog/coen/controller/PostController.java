@@ -83,6 +83,7 @@ public class PostController {
 
     @PatchMapping("/posts/{postId}")
     public PostResponse edit(@PathVariable Long postId, @RequestBody @Valid PostEdit request) {
+        log.info("들어왔어요");
         return postService.edit(postId, request);
     }
 
